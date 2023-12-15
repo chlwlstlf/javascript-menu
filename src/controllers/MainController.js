@@ -1,4 +1,4 @@
-import MissionUtils from "@woowacourse/mission-utils";
+import { Console } from "@woowacourse/mission-utils";
 import OutputView from "../views/OutputView.js";
 import InputController from "./InputController.js";
 import { RandomCategory } from "../models/RandomCategory.js";
@@ -6,21 +6,31 @@ import { RandomMenu } from "../models/RandomMenu.js";
 import menu from "../constants/menu.js";
 
 export default class MainController {
+  #names;
   #coachesInfo = {};
   #categories = [];
+
   async start() {
-    const names = ["토미", "제임스", "포코"];
-    const cannotEat = [
-      ["우동", "스시"],
-      ["뇨끼", "월남쌈"],
-      ["마파두부", "고추잡채"],
-    ];
-    for (let i = 0; i < names.length; i++) {
-      this.#coachesInfo[names[i]] = {
-        cannotEat: cannotEat[i],
+    OutputView.start();
+    await this.input();
+    await this.setCategory();
+    await this.setMenu();
+    await this.output();
+  }
+
+  async input() {
+    const inputController = new InputController();
+    this.#names = await inputController.inputName();
+    for (let i = 0; i < this.#names.length; i++) {
+      const cannotEat = await inputController.inputCannotEat(this.#names[i]);
+      this.#coachesInfo[this.#names[i]] = {
+        cannotEat: cannotEat,
         canEat: [],
       };
     }
+  }
+
+  async setCategory() {
     while (true) {
       const category = new RandomCategory().category;
       const categoryCount = this.#categories.filter((value) => value === category).length;
@@ -29,18 +39,23 @@ export default class MainController {
       }
       if (this.#categories.length === 5) break;
     }
+  }
 
+  async setMenu() {
     for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < names.length; j++) {
+      for (let j = 0; j < this.#names.length; j++) {
         while (true) {
           const menu = new RandomMenu(this.#categories[i]).menu;
-          if (!(this.#coachesInfo[names[j]].cannotEat.includes(menu) || this.#coachesInfo[names[j]].canEat.includes(menu))) {
-            this.#coachesInfo[names[j]].canEat.push(menu);
+          if (!(this.#coachesInfo[this.#names[j]].cannotEat.includes(menu) || this.#coachesInfo[this.#names[j]].canEat.includes(menu))) {
+            this.#coachesInfo[this.#names[j]].canEat.push(menu);
             break;
           }
         }
       }
     }
+  }
+
+  async output() {
     OutputView.resultTitle();
     OutputView.result("카테고리", this.#categories);
     Object.entries(this.#coachesInfo).forEach(([key, value]) => {

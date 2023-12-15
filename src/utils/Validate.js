@@ -12,7 +12,7 @@ const Validate = {
     this.notDuplicate(splitedValue);
   },
 
-  winningNumber(input) {
+  cannotEat(input) {
     this.notNull(input);
     const splitedValue = input.split(",").map((value) => value.trim());
     splitedValue.forEach((value) => {
@@ -33,7 +33,7 @@ const Validate = {
   },
 
   outOfRange(input) {
-    if (Number(input) < 2 || Number(input) > 4) {
+    if (input.length < 2 || input.length > 4) {
       throw new Error(errorMessage.OUT_OF_RANGE);
     }
   },

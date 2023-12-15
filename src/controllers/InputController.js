@@ -1,4 +1,4 @@
-import MissionUtils from "@woowacourse/mission-utils";
+import { Console } from "@woowacourse/mission-utils";
 import InputView from "../views/InputView.js";
 import Validate from "../utils/Validate.js";
 
@@ -10,7 +10,7 @@ export default class InputController {
         Validate.name(input);
         return input.split(",").map((value) => value.trim());
       } catch (error) {
-        MissionUtils.Console.print(error.message);
+        Console.print(error.message);
       }
     }
   }
@@ -21,7 +21,7 @@ export default class InputController {
         Validate.cannotEat(input);
         return input.split(",").map((value) => value.trim());
       } catch (error) {
-        MissionUtils.Console.print(error.message);
+        Console.print(error.message);
       }
     }
   }

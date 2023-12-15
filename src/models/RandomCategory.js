@@ -1,4 +1,4 @@
-import MissionUtils from "@woowacourse/mission-utils";
+import { Random } from "@woowacourse/mission-utils";
 
 export class RandomCategory {
   constructor() {
@@ -9,7 +9,7 @@ export class RandomCategory {
       [4, "아시안"],
       [5, "양식"],
     ]);
-    const category = categories.get(MissionUtils.Random.pickNumberInRange(1, 5));
+    const category = categories.get(Random.pickNumberInRange(1, 5));
     this.category = category;
   }
 }

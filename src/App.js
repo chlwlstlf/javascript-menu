@@ -5,7 +5,7 @@ class App {
     this.mainController = new MainController();
   }
   async play() {
-    this.mainController.start();
+    await this.mainController.start();
   }
 }
 
